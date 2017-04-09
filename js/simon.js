@@ -1,7 +1,59 @@
+window.addEventListener('load', loadPage)
+
+let nombre = document.getElementById('nombre')
+let header = document.getElementById('header')
+let puntaje = document.getElementById('puntuacion')
+
+function loadPage () {
+
+  swal({
+  title: "Bienvenido a Simon Dice: ",
+  text: "Este es un juego con el fin de entrenar tu memoria, estas listo! Ingresa tu Nombre:",
+  type: "input",
+  showCancelButton: true,
+  closeOnConfirm: false,
+  animation: "slide-from-top",
+  inputPlaceholder: "Ingresa tu Nombre"
+  },
+  function infoPage (inputValue){
+    if (inputValue === false) return false;
+    
+    if (inputValue === "") {
+      swal.showInputError("Debes de Ingresar tu Nombre!");
+      return false
+    }
+    
+    swal("Bien!", "Empecemos con el juego: " + inputValue, "success");
+
+    setTimeout(function message () {
+
+      nombre.innerHTML = `Nombre : ${inputValue}`
+      addClassHeader()
+      nextLevel(0)
+
+    },1000);
+  });
+
+  window.removeEventListener('load',loadPage)
+
+}
+
+function addClassHeader () {
+  header.classList.add('header')
+  nombre.classList.add('nombre')
+  puntaje.classList.add('puntuacion')
+  puntaje.innerHTML = 'Puntuación : 0000 pts'
+}
+
+function removeClassHeader () {
+  header.classList.remove('header')
+  nombre.classList.remove('nombre')
+  puntaje.classList.remove('puntuacion')
+}
+
+let puntajeActual = 0
 const levels = 15
 let teclas = generateTeclas(levels)
-
-nextLevel(0)
 
 function nextLevel(nivelactual) {
 
@@ -40,6 +92,8 @@ function nextLevel(nivelactual) {
     if (ev.keyCode == teclaactual) {
 
       activate(teclaactual, { success: true })
+      puntajeActual += 5
+      puntaje.innerHTML = `Puntuación : ${puntajeActual} pts `
     
       i++
 
@@ -56,9 +110,11 @@ function nextLevel(nivelactual) {
 
       activate(ev.keyCode, { fail: true })
       window.removeEventListener('keydown', onkeydown)
+      removeClassHeader()
+
       swal ({
         title: 'Perdiste :(',
-        text: '¿Quieres volver a intentarlo?',
+        text: `Tu puntuación es " ${puntajeActual} " pts ¿Quieres volver a intentarlo?`,
         showCancelButton: true,
         confirmButtonText: 'Sí',
         cancelButtonText: 'No,',
@@ -66,8 +122,18 @@ function nextLevel(nivelactual) {
       }, function (ok) {
 
         if (ok) {
+          
           teclas = generateTeclas(levels)
+          puntajeActual = 0
+          addClassHeader()
           nextLevel(0)
+
+        } else {
+          
+          puntajeActual = 0
+          teclas = generateTeclas(levels)
+          setTimeout(function (){ loadPage() },500)
+          
         }
 
       })

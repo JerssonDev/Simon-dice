@@ -6,7 +6,7 @@ body {
 
 .keyboard {
   display: flex;
-  height: 100%;
+  height: auto;
   justify-content: center;
   flex-direction: column;
 }
@@ -50,6 +50,25 @@ body {
   color: white;
   border-color: #e74c3c;
 }
+
+header {
+  max-width: 1000px;
+  margin: 50px auto;
+  color: black;
+}
+
+.header {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nombre, .puntuacion {
+  animation: appear 1s;
+  transition: all ease .5s;
+  font-size: 20px;
+}
+
 
 @keyframes appear {
   0% {
